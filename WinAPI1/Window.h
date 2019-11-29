@@ -13,30 +13,14 @@ public:
 	BOOL Create(
 		PCWSTR lpWindowName,
 		DWORD dwStyle,
-		DWORD dwExStyle,
-		int x,
-		int y,
-		int nWidth,
-		int nHeight,
-		HWND hWndParent,
-		HMENU hMenu
-	)
-	{
-		WNDCLASS wc = { 0 };
-
-		wc.lpfnWndProc = DERIVED_TYPE::WindowProc;
-		wc.hInstance = GetModuleHandle(NULL);
-		wc.lpszClassName = ClassName();
-
-		RegisterClass(&wc);
-
-		m_hwnd = CreateWindowEx(
-			dwExStyle, ClassName(), lpWindowName, dwStyle, x, y,
-			nWidth, nHeight, hWndParent, hMenu, GetModuleHandle(NULL), this
-		);
-
-		return (m_hwnd ? TRUE : FALSE);
-	}
+		DWORD dwExStyle = 0,
+		int x = CW_USEDEFAULT,
+		int y = CW_USEDEFAULT,
+		int nWidth = CW_USEDEFAULT,
+		int nHeight = CW_USEDEFAULT,
+		HWND hWndParent = 0,
+		HMENU hMenu = 0
+	);
 
 	HWND Window() const { return m_hwnd; }
 
@@ -55,28 +39,4 @@ public:
 	PCWSTR  ClassName() const { return L"Sample Window Class"; }
 	LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
 };
-
-
-LRESULT MainWindow::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
-{
-	switch (uMsg)
-	{
-	case WM_DESTROY:
-		PostQuitMessage(0);
-		return 0;
-
-	case WM_PAINT:
-	{
-		PAINTSTRUCT ps;
-		HDC hdc = BeginPaint(m_hwnd, &ps);
-		FillRect(hdc, &ps.rcPaint, (HBRUSH)(COLOR_WINDOW + 1));
-		EndPaint(m_hwnd, &ps);
-	}
-	return 0;
-
-	default:
-		return DefWindowProc(m_hwnd, uMsg, wParam, lParam);
-	}
-	return TRUE;
-}
 
