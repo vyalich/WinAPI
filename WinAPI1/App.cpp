@@ -1,13 +1,19 @@
 #include "App.h"
 
-int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int nCmdShow)
+int App::Init()
 {
-	MainWindow win;
-
-	if (!win.Create(L"Learn to Program Windows", WS_OVERLAPPEDWINDOW))
+	srand(time(0));
+	if (!win.Create(L"Hello WinAPI", WS_OVERLAPPEDWINDOW))
 	{
-		return 0;
+		return 1;
 	}
+	return 0;
+}
+
+int App::OnExec(int nCmdShow)
+{
+	if (Init())
+		return 1;
 
 	ShowWindow(win.Window(), nCmdShow);
 
@@ -19,6 +25,12 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int nCmdShow
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);
 	}
-
 	return 0;
+}
+
+int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR, int nCmdShow)
+{
+	App app;
+
+	return app.OnExec(nCmdShow);
 }

@@ -1,15 +1,13 @@
 #pragma once
-#include <Windows.h>
 #include "Window.h"
 
 class App
 {
-public:
-	int		Init();
-	int		OnExec();
-	void	Clear();
-
 private:
+	MainWindow win;
 
+public:
+	int  Init();
+	int  OnExec(int nCmdShow);
 };
 
