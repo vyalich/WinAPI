@@ -1,0 +1,11 @@
+﻿  App.cpp
+E:\GitHub\WinAPI\WinAPI2\Window.h(65,1): error C2440:  =: невозможно преобразовать "LPCWSTR" в "LPCSTR"
+E:\GitHub\WinAPI\WinAPI2\Window.h(65,31): message :  Типы, на которые указывают указатели, не связаны; для преобразования требуется reinterpret_cast, приведение в стиле С или приведение в стиле функции
+E:\GitHub\WinAPI\WinAPI2\Window.h(60): message :  во время компиляции функции-члена класс шаблон "BOOL BaseWindow<MainWindow>::Create(PCWSTR,DWORD,DWORD,int,int,int,int,HWND,HMENU)"
+E:\GitHub\WinAPI\WinAPI2\App.cpp(5): message :  выполняется компиляция ссылки на экземпляр шаблон функции "BOOL BaseWindow<MainWindow>::Create(PCWSTR,DWORD,DWORD,int,int,int,int,HWND,HMENU)"
+E:\GitHub\WinAPI\WinAPI2\Window.h(88): message :  выполняется компиляция ссылки на экземпляр класс шаблон функции "BaseWindow<MainWindow>"
+E:\GitHub\WinAPI\WinAPI2\Window.h(69,12): error C2664:  "HWND CreateWindowExA(DWORD,LPCSTR,LPCSTR,DWORD,int,int,int,int,HWND,HMENU,HINSTANCE,LPVOID)": невозможно преобразовать аргумент 2 из "LPCWSTR" в "LPCSTR"
+  Draw.cpp
+  Window.cpp
+  Создание кода...
+E:\GitHub\WinAPI\WinAPI2\Window.h(70,24): message :  Типы, на которые указывают указатели, не связаны; для преобразования требуется reinterpret_cast, приведение в стиле С или приведение в стиле функции

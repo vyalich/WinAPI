@@ -12,6 +12,7 @@
 #include <WinBase.h>
 
 #include "SafeRelease.h"
+#include "Draw.h"
 
 template <class DERIVED_TYPE>
 class BaseWindow
@@ -77,7 +78,7 @@ public:
 
 protected:
 
-	virtual PCWSTR  ClassName() const = 0;
+	virtual LPCWSTR  ClassName() const = 0;
 	virtual LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) = 0;
 
 	HWND m_hwnd;
@@ -86,35 +87,10 @@ protected:
 class MainWindow : public BaseWindow<MainWindow>
 {
 private:
-	//drawing resources
-	ID2D1Factory*			pFactory;
-	ID2D1HwndRenderTarget*	pRenderTarget;
-	ID2D1SolidColorBrush*	pBrush;
-
-	//drawing text resources
-	IDWriteFactory*			pDWriteFactory;
-	IDWriteTextFormat*		pTextFormat;
-	ID2D1SolidColorBrush*	pBlackBrush;
-	LPCWSTR					author;
-	LPCWSTR					version;
-	D2D1_RECT_F				layout;
-
-	//ellipse resources
-	D2D1_ELLIPSE	ellipse;
-	DOUBLE			el_x, el_y, el_a, el_b;
-
-	void    CalculateLayout();
-	HRESULT CreateGraphicsResources();
-	void    DiscardGraphicsResources();
-	void    OnPaint();
-	void    Resize();
 
 public:
+	MainWindow() {}
 
-	MainWindow() : pFactory(NULL), pRenderTarget(NULL), pBrush(NULL)
-	{
-	}
-
-	PCWSTR  ClassName() const { return L"Circle Window Class"; }
+	LPCWSTR  ClassName() const { return L"Graph editor class"; }
 	LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
 };

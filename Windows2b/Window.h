@@ -11,7 +11,10 @@
 #include <sysinfoapi.h>
 #include <WinBase.h>
 
-#include "SafeRelease.h"
+//#include "SafeRelease.h"
+#include "Draw.h"
+#include "COM.h"
+#include "Graph.h"
 
 template <class DERIVED_TYPE>
 class BaseWindow
@@ -77,44 +80,39 @@ public:
 
 protected:
 
-	virtual PCWSTR  ClassName() const = 0;
+	virtual LPCWSTR  ClassName() const = 0;
 	virtual LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) = 0;
 
 	HWND m_hwnd;
 };
 
+class TextInputWindow : public BaseWindow<TextInputWindow>
+{
+private:
+	LPCWSTR CName;
+
+public:
+	TextInputWindow(LPCWSTR name) { CName = name; }
+	LPCWSTR  ClassName() const { return CName; }
+	LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
+};
+
 class MainWindow : public BaseWindow<MainWindow>
 {
 private:
-	//drawing resources
-	ID2D1Factory*			pFactory;
-	ID2D1HwndRenderTarget*	pRenderTarget;
-	ID2D1SolidColorBrush*	pBrush;
+	LPWSTR pFileName;
+	Graph  m_Graph;
+	TextInputWindow MinX;
+	//TextInputWindow MaxX;
+	//TextInputWindow MinY;
+	//TextInputWindow MaxY;
 
-	//drawing text resources
-	IDWriteFactory*			pDWriteFactory;
-	IDWriteTextFormat*		pTextFormat;
-	ID2D1SolidColorBrush*	pBlackBrush;
-	LPCWSTR					author;
-	LPCWSTR					version;
-	D2D1_RECT_F				layout;
-
-	//ellipse resources
-	D2D1_ELLIPSE	ellipse;
-	DOUBLE			el_x, el_y, el_a, el_b;
-
-	void    CalculateLayout();
-	HRESULT CreateGraphicsResources();
-	void    DiscardGraphicsResources();
-	void    OnPaint();
+	void	Paint();
 	void    Resize();
 
 public:
+	MainWindow() : MinX(L"MinX") {}//, MinY(L"MinY"), MaxX(L"MaxX"), MaxY(L"MaxY") { }
 
-	MainWindow() : pFactory(NULL), pRenderTarget(NULL), pBrush(NULL)
-	{
-	}
-
-	PCWSTR  ClassName() const { return L"Circle Window Class"; }
+	LPCWSTR  ClassName() const { return L"Graph editor class"; }
 	LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
 };
