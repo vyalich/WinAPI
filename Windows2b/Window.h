@@ -86,33 +86,29 @@ protected:
 	HWND m_hwnd;
 };
 
-class TextInputWindow : public BaseWindow<TextInputWindow>
-{
-private:
-	LPCWSTR CName;
-
-public:
-	TextInputWindow(LPCWSTR name) { CName = name; }
-	LPCWSTR  ClassName() const { return CName; }
-	LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
-};
-
 class MainWindow : public BaseWindow<MainWindow>
 {
 private:
 	LPWSTR pFileName;
 	Graph  m_Graph;
-	TextInputWindow MinX;
-	//TextInputWindow MaxX;
-	//TextInputWindow MinY;
-	//TextInputWindow MaxY;
+	HWND MinX, MaxX, MinY, MaxY;
 
 	void	Paint();
 	void    Resize();
 
 public:
-	MainWindow() : MinX(L"MinX") {}//, MinY(L"MinY"), MaxX(L"MaxX"), MaxY(L"MaxY") { }
+	MainWindow() {}
 
 	LPCWSTR  ClassName() const { return L"Graph editor class"; }
 	LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
+};
+
+class TextWindow
+{
+private:
+	D2D1_RECT_U rc;
+	HWND m_hwnd;
+
+public:
+	void Create(FLOAT def, D2D1_RECT_U rect);
 };

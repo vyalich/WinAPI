@@ -47,10 +47,6 @@ int DRAWER::Init(HWND hwnd)
 						{
 							hr = pTextFormat->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
 						}
-						if (SUCCEEDED(hr))
-						{
-							hr = pTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
-						}
 						return 0;
 					}
 				}
@@ -78,16 +74,20 @@ void DRAWER::Resize(HWND hwnd)
 void DRAWER::PaintBG()
 {
 	pRenderTarget->Clear(D2D1::ColorF(0.8f, 0.8f, 0.8f));
-	PaintNet();
+	//PaintNet();
 }
 
-void DRAWER::PaintNet()
+void DRAWER::PaintNet(D2D1_RECT_F minmax)
 {
 	D2D1_SIZE_F size = pRenderTarget->GetSize();
 	FLOAT dx = size.width * 0.95 / 20.0;
 	FLOAT dy = size.height * 0.85 / 20.0;
 	FLOAT startY = size.height * 0.025;
 	FLOAT startX = size.height * 0.025;
+	FLOAT startTX = 0;
+	FLOAT startTY = 0;
+	FLOAT Tdx = (minmax.right - minmax.left) / 20;
+	FLOAT Tdy = (minmax.top - minmax.bottom) / 20;
 
 	if (axis.x > 0)
 	{
@@ -95,6 +95,14 @@ void DRAWER::PaintNet()
 		pRenderTarget->DrawLine(D2D1::Point2F(axis.x, 0), D2D1::Point2F(axis.x - size.height * 0.005, size.width * 0.01), pBlackBrush, 2);
 		pRenderTarget->DrawLine(D2D1::Point2F(axis.x, 0), D2D1::Point2F(axis.x + size.height * 0.005, size.width * 0.01), pBlackBrush, 2);
 		startX = axis.x;
+	}
+	else if (axis.x = AXIS_LEFT)
+	{
+		startTX = minmax.left;
+	}
+	else if (axis.x = AXIS_RIGHT)
+	{
+		startTX = minmax.right;
 	}
 	
 	if (axis.y > 0)
@@ -106,21 +114,31 @@ void DRAWER::PaintNet()
 	}
 
 	FLOAT n;
+	
+	//horizontal lines draw
+
+	pTextFormat->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_LEADING);
 	for (int i = 1; (n = startY + i * dy) < size.height; i++)
 	{
 		pRenderTarget->DrawLine(D2D1::Point2F(0, n), D2D1::Point2F(size.width, n), pGrayBrush);
+		DrawNum(startTY - i * Tdy, startX, n);
 	}
 	for (int i = 1; (n = startY - i * dy) > 0; i++)
 	{
 		pRenderTarget->DrawLine(D2D1::Point2F(0, n), D2D1::Point2F(size.width, n), pGrayBrush);
+		DrawNum(startTY + i * Tdy, startX, n);
 	}
+
+	//vertical lines draw
 	for (int i = 1; (n = startX + i * dx) < size.width; i++)
 	{
 		pRenderTarget->DrawLine(D2D1::Point2F(n, 0), D2D1::Point2F(n, size.height), pGrayBrush);
+		DrawNum(startTX + i * Tdx, n, startY);
 	}
 	for (int i = 1; (n = startX - i * dx) > 0; i++)
 	{
 		pRenderTarget->DrawLine(D2D1::Point2F(n, 0), D2D1::Point2F(n, size.height), pGrayBrush);
+		DrawNum(startTX - i * Tdx, n, startY);
 	}
 }
 
@@ -135,4 +153,12 @@ void DRAWER::SetDIPScale(HWND hwnd)
 	DIPscale.x = GetDeviceCaps(hdc, LOGPIXELSX) / 96.0f;
 	DIPscale.y = GetDeviceCaps(hdc, LOGPIXELSY) / 96.0f;
 	ReleaseDC(hwnd, hdc);
+}
+
+void DRAWER::DrawNum(FLOAT n, FLOAT x, FLOAT y)
+{
+	WCHAR buf[10];
+	D2D1_SIZE_F size = pRenderTarget->GetSize();
+	swprintf_s(buf, L"%.2f", n);
+	pRenderTarget->DrawText(buf, lstrlen(buf), pTextFormat, D2D1::RectF(x, y, x + size.width*0.1, y + size.height*0.1), pBlackBrush);
 }

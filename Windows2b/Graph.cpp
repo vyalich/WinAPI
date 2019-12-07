@@ -8,14 +8,17 @@ bool DotCompare(const Dot& c1, const Dot& c2)
 
 int Graph::Read(LPWSTR pPath)
 {
+	minX = minY = -20;
+	maxX = maxY = 20;
+
 	if (pPath)
 	{
 		//read dots from file
 		std::ifstream in(pPath, std::ios_base::binary);
 		Dot n_Dot;
 
-		if (in.tellg() > 0)
-		{
+		//if (in.tellg() > 0)
+		//{
 			while (in.read((char*)& n_Dot, sizeof(Dot)))
 			{
 				l_Dots.emplace_back(n_Dot);
@@ -37,25 +40,20 @@ int Graph::Read(LPWSTR pPath)
 				if (maxY < li.y)
 					maxY = li.y;
 			}
-		}
-	}
-	else
-	{
-		minX = minY = -20;
-		maxX = maxY = 20;
+		//}
 	}
 
 	SetScale();
 	SetAxis();
 
-	//WCHAR buf[100];
-	/*for (auto& li : l_Dots)
+	/*WCHAR buf[100];
+	for (auto& li : l_Dots)
 	{
 		swprintf_s(buf, L"%f %f", li.x, li.y);
 		MessageBox(NULL, buf, L"x y", MB_OK);
-	}*/
-	//swprintf_s(buf, L"%f %f %f %f",minX, maxX, minY, maxY);
-	//MessageBox(NULL, buf, L"x y", MB_OK);
+	}
+	swprintf_s(buf, L"%f %f %f %f",minX, maxX, minY, maxY);
+	MessageBox(NULL, buf, L"x y", MB_OK);*/
 
 	return 0;
 }
@@ -63,6 +61,22 @@ int Graph::Read(LPWSTR pPath)
 //TODO
 int Graph::Write(LPWSTR pPath)
 {
+	if (!pPath)
+		return 0;
+		
+	std::ofstream out(pPath, std::ios_base::binary);
+	
+	if (!out)
+		return -1;
+
+	for (auto& li : l_Dots)
+	{
+		out.write((char*)& li.x, sizeof(li.x));
+		out.write((char*)& li.y, sizeof(li.y));
+	}
+
+	out.close();
+
 	return 0;
 }
 

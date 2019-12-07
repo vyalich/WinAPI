@@ -9,8 +9,11 @@ LRESULT MainWindow::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 		//initialise
 		if (DRAWER::DRAW.Init(m_hwnd) < 0 || FAILED(COM::com.Init()))
 			return -1;// Fail CreateWindowEx.
+		RECT rc;
+		GetClientRect(m_hwnd, &rc);
+		MinX = CreateWindowExW(WS_EX_RIGHT, L"EDIT", L"", WS_BORDER | WS_CHILD | WS_VISIBLE, 10, rc.bottom - 30, 70, 20, m_hwnd, NULL, NULL, NULL);
+		//ShowWindow(MinX, SW_SHOWNORMAL);
 
-		MinX.Create(L"EDIT", NULL, WS_BORDER | WS_CHILD | WS_VISIBLE, 10, 10, 100, 10, m_hwnd);
 
 		//load file on first run
 		PWSTR pPath = NULL;
@@ -18,8 +21,6 @@ LRESULT MainWindow::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 		COM::com.GetFile(&pPath);
 		m_Graph.Read(pPath);
 		CoTaskMemFree(pPath);
-
-		//MinX.Create("MinX", )
 
 		return 0; 
 	}
@@ -41,10 +42,16 @@ LRESULT MainWindow::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 		return 0;
 
 	case WM_DESTROY:
+	{
 		//DRAWER::DRAW.CleanUP();	//TODO
 		//COM::com.CleanUp();	//TODO
+		PWSTR pPath = NULL;
+		MessageBox(NULL, L"Или нажмите отмена, чтобы не сохранять", L"Выберите файл для сохранения", MB_OK);
+		COM::com.GetFile(&pPath);
+		m_Graph.Write(pPath);
 		PostQuitMessage(0);
 		return 0;
+	}
 
 	case WM_PAINT:
 		Paint();
@@ -60,10 +67,15 @@ void MainWindow::Paint()
 	BeginPaint(m_hwnd, &ps);
 	DRAWER::DRAW.BeginPaint();
 	DRAWER::DRAW.PaintBG();
+	DRAWER::DRAW.PaintNet(m_Graph.GetMinMax());
 	m_Graph.Draw();
 	DRAWER::DRAW.EndPaint();
 	//TODO: draw dots, ui
 	EndPaint(m_hwnd, &ps);
+	//ShowWindow(MinX, SW_SHOWNORMAL);
+	//BringWindowToTop(MinX);
+	InvalidateRect(MinX, NULL, TRUE);
+	UpdateWindow(MinX);
 }
 
 void MainWindow::Resize()
@@ -73,23 +85,11 @@ void MainWindow::Resize()
 	m_Graph.SetAxis();
 }
 
-LRESULT TextInputWindow::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
+void TextWindow::Create(FLOAT def, D2D1_RECT_U rect)
 {
-	/*switch (uMsg)
-	{
-	case WM_CREATE:
-	{
-		return 0;
-	}
-	case WM_DESTROY:
-		//DRAWER::DRAW.CleanUP();	//TODO
-		//COM::com.CleanUp();	//TODO
-		PostQuitMessage(0);
-		return 0;
+	WCHAR buf[12];
+	swprintf_s(buf, L"%.2f", def);
+	rc = rect;
 
-	case WM_PAINT:
-		return 0;
-	}*/
-
-	return DefWindowProc(m_hwnd, uMsg, wParam, lParam);
+	m_hwnd = CreateWindowExW(WS_EX_RIGHT, L"EDIT", L"", WS_BORDER | WS_CHILD | WS_VISIBLE, rc.left, rc.top, rc.right, rc.bottom, m_hwnd, NULL, NULL, NULL);
 }

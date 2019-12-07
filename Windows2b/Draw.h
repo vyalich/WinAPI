@@ -1,10 +1,20 @@
 #pragma once
 
-#include <windowsx.h>
+#include <windows.h>
 #include <d2d1.h>
 #pragma comment(lib, "d2d1")
 #include <dwrite.h>
 #pragma comment(lib, "Dwrite")
+#include <stdlib.h>
+#include <stdio.h>
+
+enum AXIS_POS
+{
+	AXIS_RIGHT = -2,
+	AXIS_LEFT = -1,
+	AXIS_TOP = -3,
+	AXIS_BOTTOM = -4
+};
 
 class DRAWER
 {
@@ -33,7 +43,7 @@ public:
 	void BeginPaint() { pRenderTarget->BeginDraw(); }
 	void EndPaint() { pRenderTarget->EndDraw(); }
 	void PaintBG();
-	void PaintNet();
+	void PaintNet(D2D1_RECT_F minmax);
 	void PaintDot(D2D1_POINT_2F center);
 	D2D1_SIZE_F GetSizeF() { return pRenderTarget->GetSize(); }
 	D2D1_SIZE_U GetSizeU() { return pRenderTarget->GetPixelSize(); }
@@ -42,5 +52,6 @@ public:
 	void SetDIPScale(HWND hwnd);
 	FLOAT GetDIPX(int x) { return static_cast<float>(x) / DIPscale.x; }
 	FLOAT GetDIPY(int y) { return static_cast<float>(y) / DIPscale.y; }
+	void DrawNum(FLOAT n, FLOAT x, FLOAT y);
 };
 

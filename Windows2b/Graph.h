@@ -6,14 +6,6 @@
 
 #include "Draw.h"
 
-enum AXIS_POS
-{
-	AXIS_RIGHT = -2,
-	AXIS_LEFT = -1,
-	AXIS_TOP = -3,
-	AXIS_BOTTOM = -4
-};
-
 struct Dot
 {
 	FLOAT x;
@@ -37,5 +29,6 @@ public:
 	Dot DPItoXY(INT x, INT y);
 	void SetAxis();
 	void Search(INT x, INT y);
+	D2D1_RECT_F GetMinMax() { return D2D1::RectF(minX, maxY, maxX, minY); }
 };
 
