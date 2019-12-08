@@ -1,2 +1,20 @@
-﻿  Window.cpp
+﻿  Draw.cpp
+E:\GitHub\WinAPI\Windows2b\Draw.cpp(83,11): warning C4244:  инициализация: преобразование "double" в "FLOAT", возможна потеря данных
+E:\GitHub\WinAPI\Windows2b\Draw.cpp(84,11): warning C4244:  инициализация: преобразование "double" в "FLOAT", возможна потеря данных
+E:\GitHub\WinAPI\Windows2b\Draw.cpp(85,15): warning C4244:  инициализация: преобразование "double" в "FLOAT", возможна потеря данных
+E:\GitHub\WinAPI\Windows2b\Draw.cpp(86,15): warning C4244:  инициализация: преобразование "double" в "FLOAT", возможна потеря данных
+E:\GitHub\WinAPI\Windows2b\Draw.cpp(96,108): warning C4244:  аргумент: преобразование "double" в "FLOAT", возможна потеря данных
+E:\GitHub\WinAPI\Windows2b\Draw.cpp(96,74): warning C4244:  аргумент: преобразование "double" в "FLOAT", возможна потеря данных
+E:\GitHub\WinAPI\Windows2b\Draw.cpp(97,108): warning C4244:  аргумент: преобразование "double" в "FLOAT", возможна потеря данных
+E:\GitHub\WinAPI\Windows2b\Draw.cpp(97,74): warning C4244:  аргумент: преобразование "double" в "FLOAT", возможна потеря данных
+E:\GitHub\WinAPI\Windows2b\Draw.cpp(101,25): warning C4244:  =: преобразование "double" в "FLOAT", возможна потеря данных
+E:\GitHub\WinAPI\Windows2b\Draw.cpp(112,23): warning C4244:  =: преобразование "double" в "FLOAT", возможна потеря данных
+E:\GitHub\WinAPI\Windows2b\Draw.cpp(114,25): warning C4244:  =: преобразование "double" в "FLOAT", возможна потеря данных
+E:\GitHub\WinAPI\Windows2b\Draw.cpp(121,67): warning C4244:  аргумент: преобразование "double" в "FLOAT", возможна потеря данных
+E:\GitHub\WinAPI\Windows2b\Draw.cpp(121,52): warning C4244:  аргумент: преобразование "double" в "FLOAT", возможна потеря данных
+E:\GitHub\WinAPI\Windows2b\Draw.cpp(122,67): warning C4244:  аргумент: преобразование "double" в "FLOAT", возможна потеря данных
+E:\GitHub\WinAPI\Windows2b\Draw.cpp(122,52): warning C4244:  аргумент: преобразование "double" в "FLOAT", возможна потеря данных
+E:\GitHub\WinAPI\Windows2b\Draw.cpp(134,24): warning C4244:  =: преобразование "double" в "FLOAT", возможна потеря данных
+E:\GitHub\WinAPI\Windows2b\Draw.cpp(188,99): warning C4244:  аргумент: преобразование "double" в "FLOAT", возможна потеря данных
+E:\GitHub\WinAPI\Windows2b\Draw.cpp(188,78): warning C4244:  аргумент: преобразование "double" в "FLOAT", возможна потеря данных
   Windows2b.vcxproj -> E:\GitHub\WinAPI\Debug\Windows2b.exe

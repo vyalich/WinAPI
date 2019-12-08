@@ -45,6 +45,7 @@ public:
 	void PaintBG();
 	void PaintNet(D2D1_RECT_F minmax);
 	void PaintDot(D2D1_POINT_2F center);
+	void PaintLine(D2D1_POINT_2F first, D2D1_POINT_2F second);
 	D2D1_SIZE_F GetSizeF() { return pRenderTarget->GetSize(); }
 	D2D1_SIZE_U GetSizeU() { return pRenderTarget->GetPixelSize(); }
 	void SetAxisX(FLOAT x) { axis.x = x; }

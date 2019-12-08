@@ -5,12 +5,19 @@ bool DotCompare(const Dot& c1, const Dot& c2)
 	return c1.x < c2.x;
 }
 
+void Graph::SetMinMax(D2D1_RECT_F minmax)
+{
+	minX = minmax.left;
+	minY = minmax.bottom;
+	maxX = minmax.right;
+	maxY = minmax.top;
+	SetScale();
+	SetAxis();
+
+}
 
 int Graph::Read(LPWSTR pPath)
 {
-	minX = minY = -20;
-	maxX = maxY = 20;
-
 	if (pPath)
 	{
 		//read dots from file
@@ -40,11 +47,9 @@ int Graph::Read(LPWSTR pPath)
 				if (maxY < li.y)
 					maxY = li.y;
 			}
-		//}
+		SetScale();
+		SetAxis();
 	}
-
-	SetScale();
-	SetAxis();
 
 	/*WCHAR buf[100];
 	for (auto& li : l_Dots)
@@ -52,7 +57,7 @@ int Graph::Read(LPWSTR pPath)
 		swprintf_s(buf, L"%f %f", li.x, li.y);
 		MessageBox(NULL, buf, L"x y", MB_OK);
 	}
-	swprintf_s(buf, L"%f %f %f %f",minX, maxX, minY, maxY);
+	/*swprintf_s(buf, L"%f %f %f %f",minX, maxX, minY, maxY);
 	MessageBox(NULL, buf, L"x y", MB_OK);*/
 
 	return 0;
@@ -81,10 +86,22 @@ int Graph::Write(LPWSTR pPath)
 }
 
 void Graph::Draw()
-{
+{	
+	BOOL first = TRUE;
+	Dot last;
 	for (auto& li : l_Dots)
 	{
 		DRAWER::DRAW.PaintDot(XYtoDIP(li));
+		if (first)
+		{
+			first = FALSE;
+			last = li;
+		}
+		else
+		{
+			DRAWER::DRAW.PaintLine(XYtoDIP(last), XYtoDIP(li));
+			last = li;
+		}
 	}
 }
 
@@ -124,16 +141,16 @@ void Graph::SetAxis()
 	
 	if (minX <= 0 && maxX >= 0)
 		DRAWER::DRAW.SetAxisX(size.width * 0.025 + (0 - minX) * scale.x);
-	else if (minX <= 0 && maxX <= 0)
+	else if (minX < 0 && maxX <= 0)
 		DRAWER::DRAW.SetAxisX(AXIS_RIGHT);
-	else
+	else if(minX >= 0 && maxX > 0)
 		DRAWER::DRAW.SetAxisX(AXIS_LEFT);
 	
 	if (minY <= 0 && maxY >= 0)
 		DRAWER::DRAW.SetAxisY(size.height * 0.875 - (0 - minY) * scale.y);
 	else if (minY <= 0 && maxY <= 0)
 		DRAWER::DRAW.SetAxisY(AXIS_TOP);
-	else
+	else if (minY >= 0 && maxY > 0)
 		DRAWER::DRAW.SetAxisY(AXIS_BOTTOM);
 
 }

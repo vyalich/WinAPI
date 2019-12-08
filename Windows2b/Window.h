@@ -16,6 +16,13 @@
 #include "COM.h"
 #include "Graph.h"
 
+enum BTN_ID
+{
+	BTN_CHANGE	= 1,
+	BTN_SAVE	= 2,
+	BTN_LOAD	= 3
+};
+
 template <class DERIVED_TYPE>
 class BaseWindow
 {
@@ -86,15 +93,56 @@ protected:
 	HWND m_hwnd;
 };
 
+class UIWindow
+{
+protected:
+	HWND m_hwnd;
+
+public:
+	UIWindow() {}
+
+	void Paint();
+	void Move(D2D1_RECT_U rect);
+};
+
+class StaticWindow : public UIWindow
+{
+public:
+	StaticWindow() {}
+
+	void Create(LPCWSTR title, D2D1_RECT_U rect, HWND hParent);
+	void ChangeTitle(LPWSTR nTitle);
+};
+
+class TextInputWindow: public UIWindow
+{
+public:
+	TextInputWindow() {}
+
+	void Create(FLOAT def, D2D1_RECT_U rect, HWND hParent);
+	HWND GetHWND() { return m_hwnd; }
+};
+
+class ButtonWindow : public UIWindow
+{
+public:
+	ButtonWindow() {}
+
+	void Create(INT ID, LPCWSTR title, D2D1_RECT_U rect, HWND hParent);
+};
+
 class MainWindow : public BaseWindow<MainWindow>
 {
 private:
-	LPWSTR pFileName;
-	Graph  m_Graph;
-	HWND MinX, MaxX, MinY, MaxY;
+	//LPWSTR	pFileName;
+	Graph	m_Graph;
+	TextInputWindow		MinX, MaxX, MinY, MaxY;
+	ButtonWindow		bChange, bSave, bLoad;
+	StaticWindow		FileName;
 
 	void	Paint();
 	void    Resize();
+	void    GetBounds();
 
 public:
 	MainWindow() {}
@@ -103,12 +151,3 @@ public:
 	LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
 };
 
-class TextWindow
-{
-private:
-	D2D1_RECT_U rc;
-	HWND m_hwnd;
-
-public:
-	void Create(FLOAT def, D2D1_RECT_U rect);
-};
